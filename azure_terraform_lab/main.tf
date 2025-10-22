@@ -5,7 +5,7 @@ terraform {
     organization = "Eastwood-Technologies"
 
     workspaces {
-      name = "Azure-IPsec-VPN-with-Virtual-NetworKGateway"
+      name = "Azure-IPsec-VPN-with-Virtual-NetwortKGateway"
     }
   }
 
