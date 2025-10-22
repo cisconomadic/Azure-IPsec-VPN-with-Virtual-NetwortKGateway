@@ -1,18 +1,18 @@
 terraform {
   required_version = ">= 1.6.0"
 
-  required_providers {
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = "~> 3.100"
-    }
-  }
-
   backend "remote" {
     organization = "Eastwood-Technologies"
 
     workspaces {
-      name = "azure-fortigate-hybrid"
+      name = "Azure-IPsec-VPN-with-Virtual-NetworKGateway"
+    }
+  }
+
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "~> 4.0"
     }
   }
 }
