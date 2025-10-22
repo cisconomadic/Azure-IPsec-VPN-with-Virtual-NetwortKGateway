@@ -1,7 +1,20 @@
-# Terraform sensitive files
-terraform.tfvars
-terraform.tfvars.json
+# Terraform
+.terraform/
 *.tfstate
 *.tfstate.backup
-.terraform/
 *.lock.hcl
+
+# Sensitive files
+terraform.tfvars
+terraform.tfvars.json
+*.pem
+*.pfx
+*.key
+
+# Local artifacts
+*.zip
+*.log
+*.bak
+fortigate_config.txt
+tfplan
+tf_outputs.json
