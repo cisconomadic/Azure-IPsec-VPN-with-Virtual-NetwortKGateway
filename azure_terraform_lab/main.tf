@@ -9,7 +9,7 @@ terraform {
   }
 
   backend "remote" {
-    organization = "eastwood-tech-lab"
+    organization = "Eastwood-Technologies"
 
     workspaces {
       name = "azure-fortigate-hybrid"
