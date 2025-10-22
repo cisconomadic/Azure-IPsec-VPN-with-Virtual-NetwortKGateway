@@ -7,6 +7,14 @@ terraform {
       version = "~> 3.100"
     }
   }
+
+  backend "remote" {
+    organization = "eastwood-tech-lab"
+
+    workspaces {
+      name = "azure-fortigate-hybrid"
+    }
+  }
 }
 
 provider "azurerm" {
