@@ -1,0 +1,12 @@
+# Terraform
+*.tfstate
+*.tfstate.backup
+*.tfplan
+.terraform/
+.terraform.lock.hc
+
+# Local output
+fortigate_config.txt
+
+# Secrets
+*.tfvars
