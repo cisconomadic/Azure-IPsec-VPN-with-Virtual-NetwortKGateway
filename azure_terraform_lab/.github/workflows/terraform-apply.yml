@@ -46,3 +46,24 @@ jobs:
 
       - name: Show Outputs
         run: terraform output
+
+      # 🧱 Generate the FortiGate config output file (if your null_resource hasn't already done it)
+      - name: Export FortiGate Config
+        if: always()
+        run: |
+          echo "------------------------------------------------------"
+          echo " Exporting FortiGate configuration from Terraform output"
+          echo "------------------------------------------------------"
+          terraform output -raw vpn_summary > fortigate_config.txt || echo "No vpn_summary output found"
+          echo "FortiGate configuration (CLI commands) exported to fortigate_config.txt"
+          ls -la fortigate_config.txt || true
+
+      # 📤 Upload FortiGate configuration as an artifact
+      - name: Upload FortiGate Config Artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fortigate-config
+          path: |
+            fortigate_config.txt
+            templates/fortigate_config.tpl
