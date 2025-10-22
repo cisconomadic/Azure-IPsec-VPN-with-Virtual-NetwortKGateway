@@ -1,72 +1,33 @@
 name: Terraform CI
-
 on:
   push:
-    branches:
-      - main
-      - master
+    branches: [ "main" ]
   pull_request:
-    branches:
-      - main
-      - master
+    branches: [ "main" ]
 
 jobs:
   terraform:
-    name: Terraform fmt / init / validate / plan
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./azure_terraform_lab
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
         with:
-          terraform_version: '1.6.0'
+          terraform_version: "1.6.0"
 
-      - name: Terraform fmt (check)
-        run: terraform fmt -check -recursive
-
-      - name: Terraform init
+      - name: Terraform Init
         env:
-          ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
-          ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
-          ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
-          ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+          TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
         run: terraform init -input=false
 
-      - name: Terraform validate
+      - name: Terraform Validate
         run: terraform validate
 
-      - name: Terraform plan
-        id: plan
-        env:
-          ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
-          ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
-          ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
-          ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
-        run: |
-          terraform plan -var-file="fortigate_vars.tfvars" -out=tfplan -input=false
-          terraform show -no-color tfplan > tfplan.txt || true
+      - name: Terraform Plan
+        run: terraform plan -no-color -out=tfplan
 
-      - name: Upload plan artifact
-        uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v4
         with:
           name: tfplan
-          path: |
-            tfplan
-            tfplan.txt
-
-      - name: Comment PR with Terraform Plan
-        if: github.event_name == 'pull_request'
-        uses: marocchino/sticky-pull-request-comment@v2
-        with:
-          header: terraform
-          message: |
-            ## Terraform Plan Summary
-            ```
-            $(cat tfplan.txt)
-            ```
+          path: tfplan
